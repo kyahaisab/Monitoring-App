@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NotesApp</string>
+    <string name="enter_your_notes_here">Enter Your Notes HERE</string>
+    <string name="sagar">Sagar</string>
 </resources>
