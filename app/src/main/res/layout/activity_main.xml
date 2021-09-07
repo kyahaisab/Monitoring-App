@@ -41,7 +41,6 @@
         app:layout_constraintTop_toBottomOf="@id/addButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_note"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

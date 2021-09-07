@@ -23,6 +23,9 @@ class NotesRVAdapter(val context: Context, val listner: INotesRVAdapter) :
         val view = LayoutInflater.from(context).inflate(R.layout.item_note, parent, false)
         val viewHolder = NoteViewHolder(view)
         viewHolder.deleteButton.setOnClickListener {
+            listner.onDeleteClicked(allNotes[viewHolder.adapterPosition])
+        }
+        viewHolder.textView.setOnClickListener {
             listner.onItemClicked(allNotes[viewHolder.adapterPosition])
         }
         return viewHolder
@@ -41,10 +44,9 @@ class NotesRVAdapter(val context: Context, val listner: INotesRVAdapter) :
         allNotes.addAll(newList)
         notifyDataSetChanged()
     }
-
-
 }
 
 interface INotesRVAdapter {
+    fun onDeleteClicked(note: Note)
     fun onItemClicked(note: Note)
 }
