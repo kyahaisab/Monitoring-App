@@ -2,9 +2,9 @@ package com.example.notesapp
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import android.text.method.ScrollingMovementMethod
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_display.*
 
 class Display : AppCompatActivity() {
@@ -22,6 +22,7 @@ class Display : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display)
 
+        twDispaly.setMovementMethod(ScrollingMovementMethod())
         val st = getIntent().getStringExtra(INFO).toString()
         twDispaly.text = st
     }
