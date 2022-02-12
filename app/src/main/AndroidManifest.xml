@@ -22,8 +22,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".alarmManager.MyBroadCastReceiver" >
-        </receiver>
+        <receiver android:name=".alarmManager.MyBroadCastReceiver"></receiver>
     </application>
 
 </manifest>

@@ -1,11 +1,15 @@
 package com.example.notesapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.notesapp.worker.MyWorkerService
+import com.example.notesapp.worker.MyWorkerService.Companion.workRequest
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), INotesRVAdapter {
@@ -29,7 +33,7 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
 
         MyWorkerService.startWorkManager(applicationContext)
 
-//        WorkManager.getInstance()
+//        WorkManager.getInstance(applicationContext)
 //            .getWorkInfoByIdLiveData(workRequest.id)
 //            .observe(this, { workInfo ->
 //                if (workInfo != null && workInfo.state.isFinished) {
@@ -40,6 +44,7 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
 //                    Log.e("SAGAR", "observing some values but not inserted $workInfo ${workInfo.state.isFinished}")
 //                }
 //            })
+        //Above code is not working, only one time its working, bcz workTRequest is changing every time
 
 
     }

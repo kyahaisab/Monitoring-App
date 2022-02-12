@@ -15,7 +15,7 @@ class AlarmInfo {
     companion object {
         fun setAlert(context: Context) {
             try {
-                val time = 60
+                val time = 20
                 val intent = Intent(
                     context,
                     MyBroadCastReceiver::class.java

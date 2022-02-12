@@ -3,24 +3,37 @@ package com.example.notesapp.worker
 import android.content.Context
 import android.util.Log
 import androidx.work.*
+import com.example.notesapp.Note
+import com.example.notesapp.NoteDataBase
+import com.example.notesapp.NoteRepository
 import com.example.notesapp.alarmManager.AlarmInfo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 
 class MyWorkerService(context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {
+    val repository: NoteRepository
     companion object {
         const val PARSE_CONSTANT = "parse_constant"
+        lateinit var workRequest: OneTimeWorkRequest
 
         fun startWorkManager(context: Context) {
             val infoToWorker =
                 Data.Builder().putString(MyWorkerService.PARSE_CONSTANT, "Info from Main to worker")
                     .build()
-            val workRequest = OneTimeWorkRequestBuilder<MyWorkerService>()
+            workRequest = OneTimeWorkRequestBuilder<MyWorkerService>()
                 .build()
             Log.e("SAGAR", "created workmanager")
             WorkManager.getInstance(context).enqueue(workRequest)
         }
+    }
+
+    init {
+        val dao = NoteDataBase.getDatabase(context).getNoteDao()
+        repository = NoteRepository(dao)
     }
 
     override fun doWork(): Result {
@@ -32,6 +45,11 @@ class MyWorkerService(context: Context, workerParams: WorkerParameters) :
         //Because of inserting Toast message thing are not working
         //   Toast.makeText(applicationContext, "in MyWorker class", Toast.LENGTH_LONG).show()
         Log.e("SAGAR", "Visited Worker $ramUsage      $currTime")
+
+        CoroutineScope(Dispatchers.Main).launch {
+            repository.insert(Note(currTime+"/n"+ramUsage))
+        }
+
         AlarmInfo.setAlert(applicationContext)
         return Result.success(data)
     }
