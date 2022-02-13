@@ -67,13 +67,20 @@ class MyWorkerService(context: Context, workerParams: WorkerParameters) :
         CoroutineScope(Dispatchers.Main).launch {
             repository.insert(
                 Note(
-                    "->TIME: $currTime" +
+                    currTime +
                             "\n\n->RAM RAM: $ramUsage" +
                             "\n\n->CHARGING STATE: $chargingStatus" +
                             "\n\n->SCREEN ONN: $isScreenOn" +
                             "\n\n->BLUETOOTH: $isBluetoothEnabled" +
                             "\n\n->INTERNET: $isInternetConnected" +
-                            "\n\n->LOCATION: $isLocationEnabled"
+                            "\n\n->LOCATION: $isLocationEnabled",
+                    currTime,
+                    ramUsage,
+                    chargingStatus.toString(),
+                    isScreenOn.toString(),
+                    isBluetoothEnabled.toString(),
+                    isInternetConnected.toString(),
+                    isLocationEnabled.toString()
                 )
             )
         }

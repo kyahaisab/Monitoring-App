@@ -5,12 +5,14 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.notesapp.graph.GraphActivity
 import com.example.notesapp.worker.MyWorkerService
 import com.example.notesapp.worker.MyWorkerService.Companion.workRequest
 import kotlinx.android.synthetic.main.activity_main.*
@@ -55,6 +57,13 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
             fab.visibility = View.GONE
 
         }
+
+        graphPlot.setOnClickListener{
+            val arrayList = ArrayList<Int>()
+            arrayList.add(1)
+            arrayList.add(2)
+            startActivity(GraphActivity.getInstance(this, arrayList))
+        }
     }
 
     override fun onDeleteClicked(note: Note) {
@@ -73,5 +82,9 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
             //  Toast.makeText(this, "Insert", Toast.LENGTH_SHORT).show()
         }
         input.setText("")
+    }
+
+    fun clearData(view: android.view.View) {
+noteViewModel.deleteAll()
     }
 }

@@ -7,7 +7,8 @@
         <entry key="app/src/main/res/drawable/ic_delete_24.xml" value="0.30923076923076925" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2994791666666667" />
         <entry key="app/src/main/res/layout/activity_display.xml" value="0.27685185185185185" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.29791666666666666" />
+        <entry key="app/src/main/res/layout/activity_graph.xml" value="0.29791666666666666" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/item_note.xml" value="0.25" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2994791666666667" />
       </map>

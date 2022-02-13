@@ -23,11 +23,25 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/deleteAllButton"
         android:layout_margin="8dp"
         android:text="INSERT"
         android:textSize="20sp"
         android:onClick="submitData"
+        android:background="@color/color"
+        app:layout_constraintTop_toBottomOf="@id/input"/>
+
+    <Button
+        android:id="@+id/deleteAllButton"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        app:layout_constraintStart_toEndOf="@+id/addButton"
+        app:layout_constraintEnd_toEndOf="parent"
+       android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="CLEAR"
+        android:textSize="20sp"
+        android:onClick="clearData"
         android:background="@color/color"
         app:layout_constraintTop_toBottomOf="@id/input"/>
 
@@ -59,6 +73,20 @@
         android:src="@drawable/ic_baseline_open_in_full_24"
         android:contentDescription="coolBar"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/graphPlot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbarSize="3dp"
+        android:src="@drawable/ic_baseline_graphic_eq_24"
+        android:contentDescription="coolBar"
+        app:layout_constraintBottom_toTopOf="@+id/fab"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp" />
 
