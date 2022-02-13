@@ -2,6 +2,9 @@ package com.example.notesapp
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -46,7 +49,12 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
 //            })
         //Above code is not working, only one time its working, bcz workTRequest is changing every time
 
+        fab.setOnClickListener {
+            val bView: View = window.decorView
+            bView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+            fab.visibility = View.GONE
 
+        }
     }
 
     override fun onDeleteClicked(note: Note) {
