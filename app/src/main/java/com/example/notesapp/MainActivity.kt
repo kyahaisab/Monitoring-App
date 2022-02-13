@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), INotesRVAdapter {
     private lateinit var noteViewModel: NoteViewModel
+    private lateinit var listRam: List<Note>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
 
         noteViewModel.allNotes.observe(this, Observer {
             adapter.updateList(it)
+            listRam = it
         })
 
         MyWorkerService.startWorkManager(applicationContext)
@@ -58,11 +60,13 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
 
         }
 
-        graphPlot.setOnClickListener{
+        graphPlot.setOnClickListener {
             val arrayList = ArrayList<Int>()
-            arrayList.add(1)
-            arrayList.add(2)
-            startActivity(GraphActivity.getInstance(this, arrayList))
+                for(i in listRam){
+                    if(i.ram!="d")
+                      arrayList.add(i.ram.toInt())
+                }
+                startActivity(GraphActivity.getInstance(this, arrayList))
         }
     }
 
@@ -85,6 +89,6 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
     }
 
     fun clearData(view: android.view.View) {
-noteViewModel.deleteAll()
+        noteViewModel.deleteAll()
     }
 }
