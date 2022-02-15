@@ -13,11 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.notesapp.graph.GraphActivity
+import com.example.notesapp.graph.GraphDialogFragment
 import com.example.notesapp.worker.MyWorkerService
 import com.example.notesapp.worker.MyWorkerService.Companion.workRequest
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), INotesRVAdapter {
+class MainActivity : AppCompatActivity(), INotesRVAdapter, GraphDialogFragment.GraphDialogFragmentListener {
+
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var listRam: List<Note>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,12 +63,8 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
         }
 
         graphPlot.setOnClickListener {
-            val arrayList = ArrayList<Int>()
-                for(i in listRam){
-                    if(i.ram!="d")
-                      arrayList.add(i.ram.toInt())
-                }
-                startActivity(GraphActivity.getInstance(this, arrayList))
+            val graphDialog = GraphDialogFragment.getInstance(this)
+            graphDialog.show(supportFragmentManager, "see graph")
         }
     }
 
@@ -90,5 +88,16 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter {
 
     fun clearData(view: android.view.View) {
         noteViewModel.deleteAll()
+    }
+
+    override fun onSelectedYesNo(buttonClicked: Boolean) {
+        if(buttonClicked) {
+            val arrayList = ArrayList<Int>()
+            for (i in listRam) {
+                if (i.ram != "d")
+                    arrayList.add(i.ram.toInt())
+            }
+            startActivity(GraphActivity.getInstance(this, arrayList))
+        }
     }
 }

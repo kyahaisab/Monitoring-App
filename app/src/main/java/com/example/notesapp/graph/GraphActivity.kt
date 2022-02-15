@@ -34,7 +34,7 @@ class GraphActivity : AppCompatActivity() {
             for(i in st){
                 pointArray?.set(index, DataPoint(xPoint,i.toDouble()/(1024.0*1024.0)))
                 index++
-                xPoint++
+                xPoint += 0.5
             }
         }
 
