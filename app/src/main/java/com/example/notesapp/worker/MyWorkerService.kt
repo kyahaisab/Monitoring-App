@@ -53,10 +53,10 @@ class MyWorkerService(context: Context, workerParams: WorkerParameters) :
         val fromMainActivity = inputData.getString(PARSE_CONSTANT)
         val ramUsage = getUsedMemorySize().toString()
         val currTime = Calendar.getInstance().time.toString()
-        val chargingStatus = isCharging()
-        val isScreenOn = checkScreenOn()
+        val chargingStatus = isCharging().toString()
+        val isScreenOn = checkScreenOn().toString()
         val isBluetoothEnabled = isBluetoothEnabled()
-        val isInternetConnected = isNetworkConnected()
+        val isInternetConnected = isNetworkConnected().toString()
         val isLocationEnabled = isLocationEnabled(applicationContext)
         val data = Data.Builder().putString(PARSE_CONSTANT, "$currTime $ramUsage").build()
 
@@ -64,25 +64,19 @@ class MyWorkerService(context: Context, workerParams: WorkerParameters) :
         //   Toast.makeText(applicationContext, "in MyWorker class", Toast.LENGTH_LONG).show()
         Log.e("SAGAR", "Visited Worker $ramUsage      $currTime")
 
+        val newNote = Note()
+        newNote.name = currTime
+        newNote.ram = ramUsage
+        newNote.charging = chargingStatus
+        newNote.screen = isScreenOn
+        newNote.bluetooth = isBluetoothEnabled.toString()
+        newNote.internet = isInternetConnected
+        newNote.location = isLocationEnabled.toString()
+
+
         CoroutineScope(Dispatchers.Main).launch {
-            repository.insert(
-                Note(
-                    currTime +
-                            "\n\n->RAM RAM: $ramUsage" +
-                            "\n\n->CHARGING STATE: $chargingStatus" +
-                            "\n\n->SCREEN ONN: $isScreenOn" +
-                            "\n\n->BLUETOOTH: $isBluetoothEnabled" +
-                            "\n\n->INTERNET: $isInternetConnected" +
-                            "\n\n->LOCATION: $isLocationEnabled",
-                    currTime,
-                    ramUsage,
-                    chargingStatus.toString(),
-                    isScreenOn.toString(),
-                    isBluetoothEnabled.toString(),
-                    isInternetConnected.toString(),
-                    isLocationEnabled.toString()
-                )
-            )
+            repository.insert(newNote)
+            // Note:: if you want to insert as Note(....), then don't pass id , otherwise it will not be inserted
         }
 
         AlarmInfo.setAlert(applicationContext)
@@ -136,7 +130,7 @@ class MyWorkerService(context: Context, workerParams: WorkerParameters) :
         return cm!!.activeNetworkInfo != null && cm.activeNetworkInfo!!.isConnected
     }
 
-    fun isLocationEnabled(context: Context): Boolean? {
+    private fun isLocationEnabled(context: Context): Boolean? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             // This is a new method provided in API 28
             val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager

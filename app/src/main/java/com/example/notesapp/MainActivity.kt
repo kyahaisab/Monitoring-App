@@ -80,7 +80,9 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter,
     fun submitData(view: android.view.View) {
         val notetext = input.text.toString()
         if (notetext.isNotEmpty()) {
-            noteViewModel.insertNote(Note(notetext))
+            val newName = Note()
+            newName.name = notetext
+            noteViewModel.insertNote(newName)
             //  Toast.makeText(this, "Insert", Toast.LENGTH_SHORT).show()
         }
         input.setText("")
@@ -96,7 +98,7 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter,
            noteViewModel.deleteAll()
        }
         else if(buttonClicked == NO) {
-         //  Toast.makeText(this, "You pressed No", Toast.LENGTH_LONG).show()
+           Toast.makeText(this, "You pressed No", Toast.LENGTH_LONG).show()
        }
     }
 }
