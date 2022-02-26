@@ -23,7 +23,6 @@
         android:id="@+id/deleteButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_delete_24"
         android:background="@drawable/ic_delete_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/text"

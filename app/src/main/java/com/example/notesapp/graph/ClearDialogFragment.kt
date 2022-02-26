@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.example.notesapp.R
 
-class GraphDialogFragment : DialogFragment() {
+class ClearDialogFragment : DialogFragment() {
 
     private var mListener: GraphDialogFragmentListener? = null
 
@@ -21,28 +21,32 @@ class GraphDialogFragment : DialogFragment() {
             dismiss()
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
-        builder.setTitle("Sure to open Graph?")
-            .setIcon(R.drawable.ic_baseline_graphic_eq_24)
+        builder.setTitle("Sure to clear entire data?")
+            .setIcon(R.drawable.ic_baseline_delete_sweep_24)
             .setPositiveButton("Yes", object : DialogInterface.OnClickListener {
                 override fun onClick(dialog: DialogInterface?, id: Int) {
-                    mListener?.onSelectedYesNo(buttonClicked = true)
+                    mListener?.onSelectedYesNo(buttonClicked = YES)
                 }
             })
             .setNegativeButton("No", object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface?, id: Int) {}
+                override fun onClick(dialog: DialogInterface?, id: Int) {
+                    mListener?.onSelectedYesNo(buttonClicked = NO)
+                }
             })
         return builder.create()
     }
 
     companion object {
-        fun getInstance(listener: GraphDialogFragmentListener?): GraphDialogFragment {
-            val fragment = GraphDialogFragment()
+        const val YES = "YES"
+        const val NO = "NO"
+        fun getInstance(listener: GraphDialogFragmentListener?): ClearDialogFragment {
+            val fragment = ClearDialogFragment()
             fragment.mListener = listener
             return fragment
         }
     }
 
     interface GraphDialogFragmentListener {
-        fun onSelectedYesNo(buttonClicked: Boolean)
+        fun onSelectedYesNo(buttonClicked: String)
     }
 }

@@ -1,25 +1,21 @@
 package com.example.notesapp
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.example.notesapp.graph.GraphActivity
-import com.example.notesapp.graph.GraphDialogFragment
+import com.example.notesapp.graph.ClearDialogFragment
+import com.example.notesapp.graph.ClearDialogFragment.Companion.NO
+import com.example.notesapp.graph.ClearDialogFragment.Companion.YES
 import com.example.notesapp.worker.MyWorkerService
-import com.example.notesapp.worker.MyWorkerService.Companion.workRequest
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), INotesRVAdapter, GraphDialogFragment.GraphDialogFragmentListener {
-
+class MainActivity : AppCompatActivity(), INotesRVAdapter,
+    ClearDialogFragment.GraphDialogFragmentListener {
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var listRam: List<Note>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +59,12 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter, GraphDialogFragment.G
         }
 
         graphPlot.setOnClickListener {
-            val graphDialog = GraphDialogFragment.getInstance(this)
-            graphDialog.show(supportFragmentManager, "see graph")
+            val arrayList = ArrayList<Int>()
+                for(i in listRam){
+                    if(i.ram!="d")
+                      arrayList.add(i.ram.toInt())
+                }
+                startActivity(GraphActivity.getInstance(this, arrayList))
         }
     }
 
@@ -87,17 +87,16 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter, GraphDialogFragment.G
     }
 
     fun clearData(view: android.view.View) {
-        noteViewModel.deleteAll()
+        val graphDialog = ClearDialogFragment.getInstance(this)
+        graphDialog.show(supportFragmentManager, "see graph")
     }
 
-    override fun onSelectedYesNo(buttonClicked: Boolean) {
-        if(buttonClicked) {
-            val arrayList = ArrayList<Int>()
-            for (i in listRam) {
-                if (i.ram != "d")
-                    arrayList.add(i.ram.toInt())
-            }
-            startActivity(GraphActivity.getInstance(this, arrayList))
-        }
+    override fun onSelectedYesNo(buttonClicked: String) {
+       if(buttonClicked == YES) {
+           noteViewModel.deleteAll()
+       }
+        else if(buttonClicked == NO) {
+         //  Toast.makeText(this, "You pressed No", Toast.LENGTH_LONG).show()
+       }
     }
 }
