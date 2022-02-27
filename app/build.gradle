@@ -49,7 +49,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-//By using below code you can ignore freeRelease Build Varient, so this will not be visible to you
+//By using below code you can ignore freeRelease Build Variant, so this will not be visible to you
     variantFilter { variant ->
         def name_types = variant.flavors*.name
         def name = name_types.join()
@@ -68,6 +68,17 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
+    }
+
+    lintOptions {
+        // if true, generate an HTML report (with issue explanations, sourcecode, etc)
+         htmlReport true
+         // optional path to report (default will be lint-results.html in the builddir)
+        htmlOutput file("lint-report.html")
+        // if true, stop the gradle build if errors are found
+        abortOnError false
+        // if true, show all locations for an error, do not truncate lists, etc.
+        showAll true
     }
 
 }
