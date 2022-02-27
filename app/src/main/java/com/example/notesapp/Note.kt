@@ -24,12 +24,12 @@ data class Note(
     @ColumnInfo(name = "internet") var internet: String = "d",
     @JvmField
     @ColumnInfo(name = "location") var location: String = "d",
-    @JvmField
-    @ColumnInfo(name = "power") var power: String = "d"
-)
 
-//@JvmField:
-// 1. @JvmField indicates weather the kotlin compiler should generate getters/setters for this property or not.
-//If its set then it will not generate getters/setters for this property and expose it as a field.
-//if you use try to access name from java file without using @JvmField , you have to use getName() and setName.
-//with this .name to get and set.
+)
+/*
+@JvmField:
+ 1. @JvmField indicates weather the kotlin compiler should generate getters/setters for this property or not.
+If its set then it will not generate getters/setters for this property and expose it as a field.
+if you use try to access name from java file without using @JvmField , you have to use getName() and setName.
+with this .name to get and set.
+ */

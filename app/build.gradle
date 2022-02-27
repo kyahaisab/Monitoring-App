@@ -18,12 +18,47 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    def BASE_URL = "BASE_URL"
+
+    flavorDimensions "dev"
+
+    productFlavors{
+        free{
+            dimension "dev"
+            manifestPlaceholders variant: 'Free'
+            applicationIdSuffix ".free"
+            buildConfigField "String", BASE_URL, '"https://freeServer.com"'
+        }
+        paid{
+            dimension "dev"
+            manifestPlaceholders variant: 'Paid'
+            applicationIdSuffix ".paid"
+            buildConfigField "String", BASE_URL, '"https://paidServer.com"'
+        }
+    }
+
     buildTypes {
         release {
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        customDebug{
+            debuggable true
+            applicationIdSuffix ".customDebug"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
+//By using below code you can ignore freeRelease Build Varient, so this will not be visible to you
+    variantFilter { variant ->
+        def name_types = variant.flavors*.name
+        def name = name_types.join()
+
+        if(variant.buildType.name == "release" && name.contains("free")){
+            setIgnore(true)
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

@@ -5,8 +5,9 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.notesapp.migration.DbMigrations
 
-@Database(entities = arrayOf(Note::class), version = 2, exportSchema = false)
+@Database(entities = arrayOf(Note::class), version = 1)
 abstract class NoteDataBase : RoomDatabase() {
 
     abstract fun getNoteDao(): NoteDao
@@ -25,7 +26,7 @@ abstract class NoteDataBase : RoomDatabase() {
                     context.applicationContext,
                     NoteDataBase::class.java,
                     "word_database"
-                ).fallbackToDestructiveMigration().build()
+                ).build()
                 INSTANCE = instance
                 // return instance
                 instance

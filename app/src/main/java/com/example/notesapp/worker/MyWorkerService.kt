@@ -65,7 +65,13 @@ class MyWorkerService(context: Context, workerParams: WorkerParameters) :
         Log.e("SAGAR", "Visited Worker $ramUsage      $currTime")
 
         val newNote = Note()
-        newNote.name = currTime
+        newNote.name = currTime +
+                "\n\n->RAM RAM: $ramUsage" +
+                "\n\n->CHARGING STATE: $chargingStatus" +
+                "\n\n->SCREEN ONN: $isScreenOn" +
+                "\n\n->BLUETOOTH: $isBluetoothEnabled" +
+                "\n\n->INTERNET: $isInternetConnected" +
+                "\n\n->LOCATION: $isLocationEnabled"
         newNote.ram = ramUsage
         newNote.charging = chargingStatus
         newNote.screen = isScreenOn

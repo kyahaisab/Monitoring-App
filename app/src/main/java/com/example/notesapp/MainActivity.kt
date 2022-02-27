@@ -1,6 +1,7 @@
 package com.example.notesapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -52,10 +53,14 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter,
         //Above code is not working, only one time its working, bcz workTRequest is changing every time
 
         fab.setOnClickListener {
-            val bView: View = window.decorView
-            bView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-            fab.visibility = View.GONE
-
+            // You can also use BuildConfig.FLAVOUR to know pais or free, etc
+            if(BuildConfig.BUILD_TYPE == "debug")
+                Toast.makeText(this, "Full screen only for premium users", Toast.LENGTH_LONG).show()
+            else {
+                val bView: View = window.decorView
+                bView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+                fab.visibility = View.GONE
+            }
         }
 
         graphPlot.setOnClickListener {

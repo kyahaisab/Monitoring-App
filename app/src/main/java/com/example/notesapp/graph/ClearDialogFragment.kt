@@ -39,6 +39,8 @@ class ClearDialogFragment : DialogFragment() {
     companion object {
         const val YES = "YES"
         const val NO = "NO"
+
+        @JvmStatic
         fun getInstance(listener: GraphDialogFragmentListener?): ClearDialogFragment {
             val fragment = ClearDialogFragment()
             fragment.mListener = listener
@@ -50,3 +52,39 @@ class ClearDialogFragment : DialogFragment() {
         fun onSelectedYesNo(buttonClicked: String)
     }
 }
+
+/*  @JvmStatic : its usage is given
+
+TestKotlin.kt
+
+class TestKotlin {
+    companion object {
+        val someString = "hello world"
+    }
+}
+Which is then called by Java, like this:
+
+TestJava.java
+
+public class TestJava {
+    String kotlinStaticString = TestKotlin.Companion.getSomeString();
+}
+but then, there's this option 2:
+
+TestKotlin.kt v2
+
+class TestKotlin {
+    companion object {
+        @JvmStatic  // <-- notice the @JvmStatic annotation
+        val someString = "hello world"
+    }
+}
+And then, call it from Java, like this:
+
+TestJava.java v2
+
+public class TestJava {
+    String kotlinStaticString = TestKotlin.getSomeString();
+}
+
+ */
