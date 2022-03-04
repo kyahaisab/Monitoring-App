@@ -32,6 +32,7 @@
         </activity>
 
         <receiver android:name=".alarmManager.MyBroadCastReceiver" />
+        <service android:name=".media.DeleteSound"/>
     </application>
 
 </manifest>

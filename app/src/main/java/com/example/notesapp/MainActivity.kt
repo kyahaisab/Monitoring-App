@@ -1,5 +1,6 @@
 package com.example.notesapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,6 +13,7 @@ import com.example.notesapp.graph.GraphActivity
 import com.example.notesapp.graph.ClearDialogFragment
 import com.example.notesapp.graph.ClearDialogFragment.Companion.NO
 import com.example.notesapp.graph.ClearDialogFragment.Companion.YES
+import com.example.notesapp.media.DeleteSound
 import com.example.notesapp.worker.MyWorkerService
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -39,22 +41,10 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter,
 
         MyWorkerService.startWorkManager(applicationContext)
 
-//        WorkManager.getInstance(applicationContext)
-//            .getWorkInfoByIdLiveData(workRequest.id)
-//            .observe(this, { workInfo ->
-//                if (workInfo != null && workInfo.state.isFinished) {
-//                    Log.e("SAGAR", "observing some values and inserted")
-//                    noteViewModel.insertNote(Note("x" + workInfo.outputData.getString(MyWorkerService.PARSE_CONSTANT)))
-//                }
-//                else{
-//                    Log.e("SAGAR", "observing some values but not inserted $workInfo ${workInfo.state.isFinished}")
-//                }
-//            })
-        //Above code is not working, only one time its working, bcz workTRequest is changing every time
 
         fab.setOnClickListener {
             // You can also use BuildConfig.FLAVOUR to know pais or free, etc
-            if(BuildConfig.BUILD_TYPE == "debug")
+            if(BuildConfig.FLAVOR != "paid")
                 Toast.makeText(this, "Full screen only for premium users", Toast.LENGTH_LONG).show()
             else {
                 val bView: View = window.decorView
@@ -94,12 +84,15 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter,
     }
 
     fun clearData(view: android.view.View) {
-        val graphDialog = ClearDialogFragment.getInstance(this)
-        graphDialog.show(supportFragmentManager, "see graph")
+        val clearDialog = ClearDialogFragment.getInstance(this)
+        clearDialog.show(supportFragmentManager, "clear all")
     }
 
     override fun onSelectedYesNo(buttonClicked: String) {
        if(buttonClicked == YES) {
+           if(BuildConfig.FLAVOR == "paid"){
+               startService(Intent(this, DeleteSound::class.java))
+           }
            noteViewModel.deleteAll()
        }
         else if(buttonClicked == NO) {

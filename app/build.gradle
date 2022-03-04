@@ -27,13 +27,15 @@ android {
             dimension "dev"
             manifestPlaceholders variant: 'Free'
             applicationIdSuffix ".free"
-            buildConfigField "String", BASE_URL, '"https://freeServer.com"'
+            buildConfigField "String", BASE_URL, BASE_URL_FREE
+            buildConfigField "String", "DEFAULT_URL", DEFAULT_URL_FREE
+            buildConfigField "long", "TIME_CONSTANT", 'System.currentTimeMillis()'
         }
         paid{
             dimension "dev"
             manifestPlaceholders variant: 'Paid'
             applicationIdSuffix ".paid"
-            buildConfigField "String", BASE_URL, '"https://paidServer.com"'
+            buildConfigField "String", BASE_URL, BASE_URL_PAID
         }
     }
 
