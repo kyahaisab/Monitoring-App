@@ -1,4 +1,4 @@
-package com.example.notesapp.graph
+package com.example.notesapp.fragments
 
 import android.content.Context
 import android.content.Intent

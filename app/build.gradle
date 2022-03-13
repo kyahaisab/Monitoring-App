@@ -82,11 +82,16 @@ android {
         // if true, show all locations for an error, do not truncate lists, etc.
         showAll true
     }
+    buildFeatures {
+        viewBinding true
+    }
 
 }
 
 dependencies {
 
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
     apply plugin: 'kotlin-android-extensions'
 
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"

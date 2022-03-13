@@ -52,7 +52,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/bordered"
+        android:background="@drawable/top_curved"
         android:paddingLeft="@dimen/padding"
         android:paddingTop="5dp"
         android:paddingEnd="@dimen/padding"

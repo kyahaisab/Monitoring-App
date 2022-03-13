@@ -1,4 +1,4 @@
-package com.example.notesapp.graph
+package com.example.notesapp.fragments
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -52,6 +52,16 @@ class ClearDialogFragment : DialogFragment() {
         fun onSelectedYesNo(buttonClicked: String)
     }
 }
+/*SuppressLint(setTextI18n) explain:
+
+fun(id: String){
+textView1.text="Error due to: $id"
+}
+above will show lint, so put SuppressLint(setTextI18n) just above fun(id: String)
+ */
+
+
+
 
 /*  @JvmStatic : its usage is given
 

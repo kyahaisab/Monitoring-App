@@ -18,7 +18,7 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         allNotes = repository.allNotes
     }
 
-    //17.25 min
+
     fun deleteNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
         repository.delete(note)
     }
@@ -31,4 +31,7 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         repository.deleteAll()
     }
 
+    fun update(note: Note) = viewModelScope.launch(Dispatchers.IO) {
+        repository.update(note)
+    }
 }

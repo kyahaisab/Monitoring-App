@@ -3,4 +3,7 @@
     <string name="enter_your_notes_here">Enter Your Notes HERE</string>
     <string name="sagar">Sagar</string>
     <string name="clear">CLEAR</string>
+    <string name="are_you_sure_to_delete_this_data">Are you sure to delete this data?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
 </resources>

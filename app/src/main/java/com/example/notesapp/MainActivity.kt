@@ -2,17 +2,16 @@ package com.example.notesapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.notesapp.graph.GraphActivity
-import com.example.notesapp.graph.ClearDialogFragment
-import com.example.notesapp.graph.ClearDialogFragment.Companion.NO
-import com.example.notesapp.graph.ClearDialogFragment.Companion.YES
+import com.example.notesapp.fragments.GraphActivity
+import com.example.notesapp.fragments.ClearDialogFragment
+import com.example.notesapp.fragments.ClearDialogFragment.Companion.NO
+import com.example.notesapp.fragments.ClearDialogFragment.Companion.YES
 import com.example.notesapp.media.DeleteSound
 import com.example.notesapp.worker.MyWorkerService
 import kotlinx.android.synthetic.main.activity_main.*
@@ -69,7 +68,7 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter,
     }
 
     override fun onItemClicked(note: Note) {
-        startActivity(Display.newInstance(this, note.name))
+        startActivity(Display.newInstance(this, note))
     }
 
     fun submitData(view: android.view.View) {
