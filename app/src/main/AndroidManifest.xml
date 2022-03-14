@@ -33,6 +33,7 @@
 
         <receiver android:name=".alarmManager.MyBroadCastReceiver" />
         <service android:name=".media.DeleteSound"/>
+        <service android:name=".StartBackgroundService"/>
     </application>
 
 </manifest>

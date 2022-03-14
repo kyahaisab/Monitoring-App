@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter,
             listRam = it
         })
 
-        MyWorkerService.startWorkManager(applicationContext)
+        startService(Intent(this, StartBackgroundService::class.java))
 
 
         fab.setOnClickListener {
