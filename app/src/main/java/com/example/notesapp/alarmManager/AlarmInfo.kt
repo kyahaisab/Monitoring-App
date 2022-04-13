@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -22,11 +23,21 @@ class AlarmInfo {
                 )
                 val pendingIntent = PendingIntent.getBroadcast(context, 234324243, intent, 0)
                 val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                alarmManager.set(
-                    AlarmManager.RTC_WAKEUP,
-                    System.currentTimeMillis() + time * 1000,
-                    pendingIntent
-                )
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    Log.e("SAGAR", "exact and Ideal")
+                    alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        System.currentTimeMillis() + time * 1000,
+                        pendingIntent
+                    )
+                }
+                else{
+                    alarmManager.set(
+                        AlarmManager.RTC_WAKEUP,
+                        System.currentTimeMillis() + time * 1000,
+                        pendingIntent
+                    )
+                }
                 Log.e("SAGAR", "Alarm is created")
                 // Toast.makeText(context, "Alarm create in $time seconds", Toast.LENGTH_LONG).show()
             } catch (error: Throwable) {

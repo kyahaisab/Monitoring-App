@@ -1,32 +1,30 @@
 package com.example.notesapp.worker
 
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.location.LocationManager
+import android.net.ConnectivityManager
 import android.os.BatteryManager
+import android.os.Build
+import android.os.PowerManager
+import android.provider.Settings
 import android.util.Log
 import androidx.work.*
 import com.example.notesapp.Note
 import com.example.notesapp.NoteDataBase
 import com.example.notesapp.NoteRepository
 import com.example.notesapp.alarmManager.AlarmInfo
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import java.util.*
-import android.os.PowerManager
-import android.bluetooth.BluetoothAdapter
-import androidx.core.content.ContextCompat.getSystemService
-
-import android.net.ConnectivityManager
-import android.location.LocationManager
-
-import android.os.Build
-import android.provider.Settings
 
 
 class MyWorkerService(context: Context, workerParams: WorkerParameters) :
-    Worker(context, workerParams) {
+    CoroutineWorker(context, workerParams) {
     val repository: NoteRepository
 
     companion object {
@@ -49,44 +47,86 @@ class MyWorkerService(context: Context, workerParams: WorkerParameters) :
         repository = NoteRepository(dao)
     }
 
-    override fun doWork(): Result {
-        val fromMainActivity = inputData.getString(PARSE_CONSTANT)
-        val ramUsage = getUsedMemorySize().toString()
-        val currTime = Calendar.getInstance().time.toString()
-        val chargingStatus = isCharging().toString()
-        val isScreenOn = checkScreenOn().toString()
-        val isBluetoothEnabled = isBluetoothEnabled()
-        val isInternetConnected = isNetworkConnected().toString()
-        val isLocationEnabled = isLocationEnabled(applicationContext)
-        val data = Data.Builder().putString(PARSE_CONSTANT, "$currTime $ramUsage").build()
+    @SuppressLint("Range", "Recycle")
+    override suspend fun doWork(): Result {
+        return coroutineScope {
+            withContext(Dispatchers.IO) {
+                try {
+                    val fromMainActivity = inputData.getString(PARSE_CONSTANT)
+                    val ramUsage = getUsedMemorySize().toString()
+                    val currTime = Calendar.getInstance().time.toString()
+                    val chargingStatus = isCharging().toString()
+                    val isScreenOn = checkScreenOn().toString()
+                    val isBluetoothEnabled = isBluetoothEnabled()
+                    val isInternetConnected = isNetworkConnected().toString()
+                    val isLocationEnabled = isLocationEnabled(applicationContext)
+                    val data =
+                        Data.Builder().putString(PARSE_CONSTANT, "$currTime $ramUsage").build()
 
-        //Because of inserting Toast message thing are not working
-        //   Toast.makeText(applicationContext, "in MyWorker class", Toast.LENGTH_LONG).show()
-        Log.e("SAGAR", "Visited Worker $ramUsage      $currTime")
+                    //Because of inserting Toast message thing are not working
+                    //   Toast.makeText(applicationContext, "in MyWorker class", Toast.LENGTH_LONG).show()
+                    Log.e("SAGAR", "Visited Worker $ramUsage      $currTime")
 
-        val newNote = Note()
-        newNote.name = currTime +
-                "\n\n->RAM RAM: $ramUsage" +
-                "\n\n->CHARGING STATE: $chargingStatus" +
-                "\n\n->SCREEN ONN: $isScreenOn" +
-                "\n\n->BLUETOOTH: $isBluetoothEnabled" +
-                "\n\n->INTERNET: $isInternetConnected" +
-                "\n\n->LOCATION: $isLocationEnabled"
-        newNote.ram = ramUsage
-        newNote.charging = chargingStatus
-        newNote.screen = isScreenOn
-        newNote.bluetooth = isBluetoothEnabled.toString()
-        newNote.internet = isInternetConnected
-        newNote.location = isLocationEnabled.toString()
+                    val newNote = Note()
+                    newNote.name = currTime +
+                            "\n\n->RAM RAM: $ramUsage" +
+                            "\n\n->CHARGING STATE: $chargingStatus" +
+                            "\n\n->SCREEN ONN: $isScreenOn" +
+                            "\n\n->BLUETOOTH: $isBluetoothEnabled" +
+                            "\n\n->INTERNET: $isInternetConnected" +
+                            "\n\n->LOCATION: $isLocationEnabled"
+                    newNote.ram = ramUsage
+                    newNote.charging = chargingStatus
+                    newNote.screen = isScreenOn
+                    newNote.bluetooth = isBluetoothEnabled.toString()
+                    newNote.internet = isInternetConnected
+                    newNote.location = isLocationEnabled.toString()
 
 
-        CoroutineScope(Dispatchers.Main).launch {
-            repository.insert(newNote)
-            // Note:: if you want to insert as Note(....), then don't pass id , otherwise it will not be inserted
+                    //   CoroutineScope(Dispatchers.Main).launch {
+                    repository.insert(newNote)
+                    // Note:: if you want to insert as Note(....), then don't pass id , otherwise it will not be inserted
+                    // }
+
+//                    val cursor: Cursor? = applicationContext.contentResolver.query(
+//                        Uri.parse("content://com.paytm.pos.provider/cardExceptions"),
+//                        null,
+//                        null,
+//                        null,
+//                        null
+//                    )
+//
+//                    // iteration of the cursor
+//                    // to print whole table
+//
+//                    // iteration of the cursor
+//                    // to print whole table
+//                    if (cursor != null) {
+//                        if (cursor.moveToFirst()) {
+//                            val strBuild = StringBuilder()
+//                            while (!cursor.isAfterLast) {
+//                                strBuild.append(
+//                                    """${cursor.getString(cursor.getColumnIndex("time"))}-
+//                                       ${cursor.getString(cursor.getColumnIndex("exceptionType"))}""".trimIndent()
+//                                )
+//                                cursor.moveToNext()
+//                            }
+//                            Log.e("SAGARI", strBuild.toString())
+//                            newNote.name = strBuild.toString()
+//                        } else {
+//                            Log.e("SAGARI", "No data found")
+//                        }
+//                    }
+
+
+                    AlarmInfo.setAlert(applicationContext)
+                    Result.success(data)
+                } catch (error: Throwable) {
+                    Log.e("SAGAR", "This time worker failed")
+                    Result.failure()
+                }
+            }
         }
-
-        AlarmInfo.setAlert(applicationContext)
-        return Result.success(data)
     }
 
     private fun checkScreenOn(): Any? {
@@ -151,3 +191,27 @@ class MyWorkerService(context: Context, workerParams: WorkerParameters) :
         }
     }
 }
+
+//1.  not using Periodic work request because its min cycle is 15 min: https://developer.android.com/reference/androidx/work/PeriodicWorkRequest#MIN_PERIODIC_INTERVAL_MILLIS
+// 2. Another way to acheieve the behaviour is to create OneTimeWorkRequest and that worker request, schedule another one for the interval you want with an initial delay
+/*
+class UploadWorker(
+    @NonNull context: Context,
+    @NonNull params: WorkerParameters?
+) : Worker(context, params!!) {
+    private val context: Context
+    override fun doWork(): Result {
+        Log.i("tracer:", "Worker executed")
+        // Indicate whether the work finished successfully with the Result
+        val mywork = OneTimeWorkRequest.Builder(UploadWorker::class.java)
+            .setInitialDelay(5, TimeUnit.MINUTES)
+            .build()
+        WorkManager.getInstance(context).enqueue(mywork)
+        return Result.success()
+    }
+
+    init {
+        this.context = context
+    }
+}
+*/

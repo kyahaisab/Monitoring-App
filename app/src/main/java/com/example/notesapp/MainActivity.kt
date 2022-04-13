@@ -1,6 +1,10 @@
 package com.example.notesapp
 
+import android.content.ComponentName
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -13,6 +17,7 @@ import com.example.notesapp.fragments.ClearDialogFragment
 import com.example.notesapp.fragments.ClearDialogFragment.Companion.NO
 import com.example.notesapp.fragments.ClearDialogFragment.Companion.YES
 import com.example.notesapp.media.DeleteSound
+import com.example.notesapp.receivers.AreoplaneModeReceiver
 import com.example.notesapp.worker.MyWorkerService
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -38,8 +43,23 @@ class MainActivity : AppCompatActivity(), INotesRVAdapter,
             listRam = it
         })
 
-        startService(Intent(this, StartBackgroundService::class.java))
+//        val aeroplaneReceiver = ComponentName(this, AreoplaneModeReceiver::class.java)
+//        packageManager.setComponentEnabledSetting(aeroplaneReceiver,
+//            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+//            PackageManager.DONT_KILL_APP
+//        )
+        val aeroplaneReceiver=AreoplaneModeReceiver()
+        IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED).also {
+            registerReceiver(aeroplaneReceiver, it)
+        }
 
+       // startService(Intent(this, StartBackgroundService::class.java))
+        val intent = Intent(this, StartBackgroundService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
 
         fab.setOnClickListener {
             // You can also use BuildConfig.FLAVOUR to know pais or free, etc

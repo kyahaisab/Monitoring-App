@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.notesapp" >
+    package="com.example.notesapp">
 
     <uses-permission
         android:name="android.permission.BLUETOOTH"
         android:required="false" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -32,8 +35,24 @@
         </activity>
 
         <receiver android:name=".alarmManager.MyBroadCastReceiver" />
-        <service android:name=".media.DeleteSound"/>
-        <service android:name=".StartBackgroundService"/>
+
+        <service android:name=".media.DeleteSound" />
+        <service
+            android:name=".StartBackgroundService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.START_BACKGROUND_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:authorities="com.example.notesapp.provider"
+            android:name=".contentProviders.NoteDataProvider"
+            android:grantUriPermissions="true"
+            android:exported="true"
+            android:enabled="true"
+           />
+
     </application>
 
 </manifest>
